@@ -1,0 +1,226 @@
+{
+  "project": "PIXEL ADVENTURE / NUSAGARA",
+  "generated": "2026-09-05",
+  "generated_from": "the real index.html and assets/ tree, not from memory",
+  "build": {
+    "single_file": "index.html",
+    "lines": 9182,
+    "build_step": null,
+    "deploy": "npx -y wrangler pages deploy /tmp/stage --project-name=parcelseven",
+    "url": "https://parcelseven.pages.dev",
+    "dev_enabled_ships_as": false,
+    "version": "2.7.0"
+  },
+  "design_system": {
+    "name": "Nusagara document system",
+    "premise": "The state runs on paperwork, so the interface is paperwork.",
+    "surfaces": [
+      "--paper #ded1af manila",
+      "--paper-2 #f0e9d7 bond",
+      "--paper-3 #c6b892 carbon",
+      "--paper-4 #b3a377 kraft"
+    ],
+    "ink": [
+      "--ink #17150f",
+      "--ink-2 #574f3c",
+      "--ink-3 #8d8267"
+    ],
+    "stamps": {
+      "red --stamp #b0322a": "an authority acted on this",
+      "blue --stamp-2 #27456f": "helpful / secondary"
+    },
+    "shape": "border-radius 0 everywhere; hard offset shadows, no blur",
+    "banned": [
+      "glass cards",
+      "gradient text",
+      "glow",
+      "backdrop blur",
+      "rounded pills",
+      "decorative lines with no meaning",
+      "emoji"
+    ],
+    "banned_game_vocabulary": [
+      "enterprise grade",
+      "enterprise-grade",
+      "absurd (as design term)",
+      "prompt",
+      "raw prompt",
+      "AI slop",
+      "AI (as label in UI)",
+      "FREAK",
+      "autentik (as dev feedback term)",
+      "nyeleneh (internal design language)"
+    ],
+    "one_sheet": "title / pause / death / victory are FORM 404-B with different stamps",
+    "typography": {
+      "file": "assets/fonts/nusagara.ttf",
+      "origin": "CraftPix Tiny Pixel Hero pack's Planes_ValMore.ttf",
+      "extended_with": [
+        "U+0027 '",
+        "U+2019 ’",
+        "U+00B7 ·",
+        "U+00D7 ×",
+        "U+2191 ↑",
+        "U+00B0 °",
+        "U+0026 &",
+        "U+2039 ‹",
+        "U+203A ›"
+      ],
+      "reason": "the original had no apostrophe, so English contractions rendered as gaps",
+      "pixel_grid_em": "68/1000",
+      "scale_px": [
+        14.7,
+        29.4,
+        44.1
+      ],
+      "rule": "type only at multiples of 14.7px or the pixel font smears"
+    },
+    "responsive": {
+      "rule": "transform:scale() shrinks pixels, NOT the layout box",
+      "consequence": "scaled small print still reserves full width; compensate with width:135.1% + overflow-wrap, or negative margin, or it shoves the layout off the page",
+      "phone_hud": "the utility strip gets its own grid row; #clockbar is a grid item (it used to be absolute and sat on the dialogue); the gamepad band is reserved with padding-bottom on #hud, not by hiding panels"
+    },
+    "character_select": {
+      "name": "the personnel deck",
+      "shape": "CSS 3D coverflow of the characters themselves, flat 2D canvases, one WebGL context in the whole page",
+      "featured_card": "live THREE.WebGLRenderer plane, lit, running the hero's idle strip",
+      "input": [
+        "ArrowLeft / ArrowRight",
+        "swipe (40px per card)",
+        "click a neighbour to select",
+        "click the centre card to start"
+      ],
+      "spread": "derived from the measured track width, not a breakpoint; .deck clips as a backstop",
+      "fallback": "webglcontextlost or a refused context leaves the flat 2D avatar in place",
+      "scale": "one integer magnification for every hero (uniform pixel size, honest heights); cards anchored to the floor and scaled about their feet so the line-up stands on one line"
+    },
+    "title_screen": "opaque paper sheet; the game does NOT render behind it (see CLAUDE.md V27)"
+  },
+  "world": {
+    "tiles": 2140,
+    "biomes": 20,
+    "tiles_per_biome": 107,
+    "heroes": 16,
+    "enemy_species": 24,
+    "boss_species": 21,
+    "portraits": 40,
+    "music_tracks": 6,
+    "regions": 20,
+    "npc_cast_main": 6,
+    "npc_cast_supporting": 8,
+    "minibosses": {
+      "minotaur": {
+        "x": 700,
+        "biome": 6,
+        "scale": 1.77,
+        "note": "NEW MERIDIAN — Act II"
+      },
+      "demon": {
+        "x": 1100,
+        "biome": 10,
+        "scale": 1.77,
+        "note": "KERING OASIS — Act II late"
+      }
+    },
+    "skills": 9,
+    "bestiary_entries": 25,
+    "warungs": 20,
+    "gates": 19,
+    "reroute": "Act IV (biomes 15-19): relay/tide/margin/field/annex, finale at Counter Nine Annex",
+    "counter8_encounter": true,
+    "collector_route_buying": "biomes 4-7 marked up x1.5, freed per-region with 3 RG counter-fee"
+  },
+  "sprite_law": {
+    "collider_origin": "o.y is the BOTTOM of the box",
+    "hero_anchor": "fitHeroToWorld() measures opaque bounds -> sc, yOff, hw, h",
+    "monster_anchor": "monsterFoot() measures the lowest opaque pixel of cell 0",
+    "critical": "the offset must be DERIVED from the height actually rendered. e.sc is the single source of truth for monster size; anchorFeet(e) recomputes yOff after any change to it. A plane scales about its centre, so a frozen offset buries the feet by height*(sc-1)/2.",
+    "scale_chain": "TIER_SCALE up to 1.22, miniboss x1.45, so 1.77 max",
+    "scale_of_the_world": {
+      "principle": "a person is the measuring stick; nothing is sized by cell padding",
+      "hero_target_h": 2.9,
+      "humanoid_enemies": {
+        "zombie": 2.65,
+        "soldier": 2.8,
+        "robot": 2.85
+      },
+      "mechanism": "MONSTERS[sp].hgt normalises drawn height via monsterBounds()",
+      "reference_heights": {
+        "mushroom": 1.25,
+        "slime": 1.63,
+        "ghost": 1.69,
+        "bunny": 2.56,
+        "skull": 3.13,
+        "minotaur": 3.81
+      },
+      "was": "heroes 2.35, zombie/soldier 1.56 — humans were the smallest things in the game"
+    }
+  },
+  "bugs_fixed": [
+    "hero cards rendered blank (paintHeroAvatars assumed a 32px cell)",
+    "deleted heroes still shipped (rewrote blurbs instead of deleting)",
+    "unlit materials have no .emissive (22k exceptions/frame killed the loop)",
+    "STORY.acts -> STORY.thread left a stale read that crashed startGame",
+    "load race: input before genLevel() left SPAWN null",
+    "music refetched on every keypress (unlockAudio + shared <audio>.src)",
+    "#mapwrap ignored the grid (absolute rule won on source order)",
+    "hero shrunk to hide a collider bug instead of fixing the anchor",
+    "enemy feet buried: yOff frozen before applyTier/miniboss rescaled the mesh",
+    "miniboss rendered stretched: scale.x reset per frame to tier scale only",
+    "`var L` in boot() shadowed the L(en,id) translator",
+    "icon() markup assigned with textContent printed raw SVG on screen",
+    "human characters were the smallest things in the world (hero 2.35, zombie 1.56, rabbit 2.56)",
+    "heroStage guarded on window.THREEJS, which is undefined — the WebGL card never built",
+    "roster mixed 6.6-8.0x and 2.1-2.8x sprite upscales side by side",
+    "window.innerHeight read 0 in an embedded context and collapsed the roster scale to 1x",
+    "updateLights touched player.dashT on the title screen, where there is no player",
+    "the in-game HUD showed through the new see-through title scrim",
+    "refreshLangUI re-injected an emoji into the JOBS label via textContent",
+    "the kit drawer's Escape was swallowed by the pause handler",
+    "phone HUD covered 39.2% of the viewport; now 14.7%",
+    "live-world title screen + a second WebGLRenderer + CSS filters on 16 layers froze real hardware; all three removed",
+    "window.THREEJS guard (undefined) also blocked the tuyul pet from ever spawning",
+    "deck arrows used glyphs absent from the pack font and rendered in a fallback typeface",
+    "the deck's swipe pointer-capture swallowed the arrow buttons' own clicks",
+    "press-and-drag on an arrow stepped the roster twice",
+    "arrow :hover latched red after a tap on touch",
+    "the deck could be sized shorter than its own arrows and clip them"
+  ],
+  "design_doc": "STORY.md — premise, cast, regions, tone law, systems, platform, what is unbuilt",
+  "i18n": {
+    "convention": "name/nameId, desc/descId, tag/tagId + L/LN/LD/LT/LRAR",
+    "static_chrome": "data-t-en / data-t-id + applyStaticLang()",
+    "verified": "scripted EN and ID sweeps: 0 cross-language leaks (the section head shows both by design)"
+  },
+  "bugs_fixed_expansion": [
+    "3x seven-digit hex literals in BIOME[5]/[12]/[14] caused Three.js Color crash — engine frozen at boot",
+    "swapBiome() clamped to 0-7, stale from 8-biome era — fixed to 0-14",
+    "storyEnterRegion key mapping: r0 was unreachable (b=0 fired 'open', b=1 fired 'r1' skipping r0) — fixed with explicit SCENE_KEYS array",
+    "SND.setBiome() capped at Math.min(b,3) — biomes 8-14 all played biome 3 music — removed cap",
+    "TRACKS only defined biome0-7 — extended to biome0-14 cycling 4 available tracks"
+  ],
+  "verified": {
+    "roster_magnification": "uniform integer across all 16",
+    "language_sweep": "EN 0 leaks (bar the deliberate bilingual section head), ID 0 leaks",
+    "level_sweep": "15/15 regions, 0 missing backgrounds, 0 stale NPC IDs, 0 old biome folder references",
+    "phone_hud": "39.2% -> 14.7% idle, 25.9% with a scene open; 0 overlaps",
+    "desktop": "live depot behind the title, camera dollying; paperwork column full height",
+    "boot": "HTTP 200, PIXEL ADVENTURE title loads, biomeAt/startGame/storyEnterRegion all present in deployed build"
+  },
+  "bugs_fixed_layout": [
+    "HUD grid crushed upward by wild --pad-h reads (clamped + guarded + CSS min caps)",
+    "scene dialogue text never painted under display:contents grid (block+float restructure)",
+    "warung/travel headers printed raw JS (+L()) in static markup",
+    "spawn hits within 2s of retry (6-tile sterile zone + spawn i-frames)",
+    "scene box photographed empty between lines (synchronous first paint)",
+    "pad height read 0 at boot because the title sheet force-hides the pad (re-measured in startGame, dialogue clears the touch clusters on phones)",
+    "scene had no touch dismissal (added #scene-x in the head band, same endScene() as Esc, stopPropagation so it never advances); geometric audit proves 0 panel overlaps on all 7 viewports",
+    "debt content fully removed (DEMON DEBT KOLEKTOR -> OASIS DEMON, MINOTAUR PREMAN -> MINOTAUR BRUTE, miniboss suffix RAJA -> APEX, bima role COLLECTOR -> ROUTE BUYER, buyer lore/receipt strings, STORY.md buyer)",
+    "R5 sweep: quest/shop/travel/event/miniboss/pause/death/victory strings all carry EN+ID twins; parkir emoji replaced with alert icon; pause biome name uses REGIONS twins",
+    "spawnPet window.THREEJS guard fixed (companion spawns, verified on screen); pause EN+ID sheets, shop panel, miniboss triggers at x=700/1100, teleports to all acts verified with 0 errors",
+    "NPC_DEFS completed (ratna/hendrik/nadia were falling back to parman) + all 8 NPC line sets carry EN twins; r14 wired to biome 14; unplayed SCENES.end wired as post-c8 epilogue; duplicate opening (timeout + region trigger) unified under sawOpening; forge/cook shop strings twinned; full quest/shop/cook/forge/enhance/travel/skill/bestiary/save-continue/death/victory flows verified end-to-end with 0 errors",
+    "open question: r7 (hard confrontation) has 16 scenes for 15 biomes — ships unwired, documented in code comment",
+    "owner rename: all 54 people/monster names are western parodies (16 couriers, 14 cast, 24 species, Postman Pete); places/items kept; STORY.md synced"
+  ],
+  "url": "https://parcelseven.pages.dev"
+}

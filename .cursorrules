@@ -1,0 +1,192 @@
+# .cursorrules — PIXEL ADVENTURE / NUSAGARA
+# Loaded by Cursor. Mirrors CLAUDE.md. Machine-readable facts: facts.json
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 0 — THE OWNER IS THE ABSOLUTE RULE. THIS OUTRANKS EVERY LINE BELOW.
+# ─────────────────────────────────────────────────────────────────────────
+# His prompts are instructions, not suggestions to be interpreted, softened,
+# or improved. If a rule here ever conflicts with what he just said, HE WINS.
+#
+# 0.1  "delete / remove / hapus / ganti"  -> the thing STOPS EXISTING.
+#      Not renamed. Not rewritten. Not kept with a better description.
+# 0.2  "I don't like this"                -> remove it. Never defend it.
+# 0.3  Ambiguous?                         -> take the STRONGER reading.
+# 0.4  Asked twice?                       -> I failed the first time.
+#                                            Re-read his words literally.
+# 0.5  Settled decisions are settled      -> never re-litigate.
+# 0.6  Do not fix a symptom to avoid      -> shrinking a sprite is not fixing
+#      fixing a cause.                       a collider. Hiding UI is not
+#                                            fixing a layout.
+# 0.7  Prefer HIS assets over the internet -> the answer is usually already in
+#                                            game-2d-pxl-assets/. Comb it first.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 1 — ORIGINALITY. "AI SLOP" IS BANNED.
+# ─────────────────────────────────────────────────────────────────────────
+# Banned: generic dark-glass cards, purple/blue gradient soup, default system
+# fonts pretending to be a design, decorative lines with no meaning, symmetric
+# blur-everything panels. If it looks like every AI demo, it is wrong.
+#
+# 1.1  THE DOCUMENT SYSTEM. Nusagara runs on paperwork, so the interface IS
+#      paperwork, everywhere, with no second visual language anywhere:
+#        - ink on paper: --paper/--paper-2/--paper-3, --ink/--ink-2/--ink-3
+#        - squared corners (--r-* are 0). No border-radius. Ever.
+#        - hard offset shadows (2-5px, no blur). One light source.
+#        - printed head bands (solid --ink strip) carry the title of a panel
+#        - hairline rule = field divider; double rule = section close;
+#          dotted leader = label ...... value; punch column = lives in a binder
+#        - red pad (--stamp) = an authority acted on it. Blue pad (--stamp-2)
+#          = helpful/secondary. Nothing else is ever red.
+#        - the START button, the RETRY button and every announcement are
+#          RUBBER STAMPS, not gradient pills.
+#      Title, pause, death and victory are ONE sheet with different stamps:
+#      FORM 404-B, stamped UNDELIVERED / PENDING / REJECTED / SIGNED FOR.
+# 1.2  Typeface is assets/fonts/nusagara.ttf — the pack's own Planes_ValMore
+#      extended with the 7 glyphs it lacked (' , U+2019, ·, ×, ↑, °, &) drawn
+#      on its own 68/1000em grid. NEVER import a webfont.
+#      Its pixel is 68/1000 em => set type ONLY at multiples of 14.7px
+#      (--t 14.7 / --t2 29.4 / --t3 44.1). 12px smears it.
+# 1.3  Every decorative element must MEAN something. No lines for vibes.
+#      A frame around a sprite is chrome competing with the art: the roster
+#      shows the characters themselves, not cards.
+# 1.3b A screen carries DECISIONS. Reference material (controls, manifest,
+#      feature lists) goes behind a tab button and opens as one pulled page
+#      (SHEETS/openSheet). Anything that covers the screen is dismissible three
+#      ways: Esc, its own close button, and a click outside — and it owns the
+#      keyboard while open so Enter cannot fire what is behind it.
+# 1.4  Study game-2d-pxl-assets/ for style before inventing.
+# 1.5  NO EMOJI IN THE UI. Marks come from ICONS + icon(name,size); static
+#      markup writes <i data-ic="key" data-s="14"> and hydrateIcons() swaps it.
+#      icon() returns MARKUP: assign with innerHTML, never textContent.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 2 — LAYOUT MAY NOT OVERLAP, BY CONSTRUCTION
+# ─────────────────────────────────────────────────────────────────────────
+# 2.1  #hud is a CSS GRID with named areas. Every HUD element is a grid item.
+#      Bottom row = legend | dialogue | minimap as THREE SEPARATE COLUMNS.
+#      Overlap is then impossible, not merely unlikely.
+# 2.2  Never solve an overlap by hiding, fading, or deleting information.
+# 2.3  No fixed pixel offsets for stacked panels — they collide the moment
+#      content grows (16 heroes wrapped the chip grid into the inventory).
+# 2.4  Respect safe-area insets on every edge.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 3 — SPRITES AND PHYSICS
+# ─────────────────────────────────────────────────────────────────────────
+# 3.1  Heroes and monsters are BIG. Never shrink art to hide a bug.
+# 3.2  o.y is the BOTTOM of the collider. A sprite is anchored by measuring
+#      its LOWEST OPAQUE PIXEL and putting that pixel on o.y. Never a
+#      hardcoded offset — cells are 32px AND 128px in this project.
+#      Applies to heroes (fitHeroToWorld) AND monsters (monsterFoot).
+# 3.2b THE OFFSET IS DERIVED, NEVER FROZEN. A plane scales about its CENTRE,
+#      so any later scale change buries the feet by height*(sc-1)/2.
+#      Measuring the foot once at construction is NOT enough — applyTier
+#      (up to 1.22x) and miniboss status (a further 1.45x, so 1.77x total)
+#      both resize the mesh afterwards. e.sc is the single source of truth
+#      for size; call anchorFeet(e) after ANY change to it, and set BOTH
+#      scale.x and scale.y from e.sc each frame or the sprite stretches.
+#      > This was the actual cause of "kakinya terpendam ke bawah" on enemies.
+#      > Measuring the foot and stopping there fixed nothing visible.
+# 3.2c A PERSON IS THE SCALE OF THE WORLD. Size is never an accident of how
+#      much padding an artist left in a cell. Heroes normalise to
+#      HERO_TARGET_H = 2.90 by measured opaque pixels; a people-shaped monster
+#      declares `hgt` in MONSTERS and normalises the same way (zombie 2.65,
+#      soldier 2.80, robot 2.85). Wildlife and minibosses keep pixel-density
+#      size so they read small / huge against a human.
+#      > Human enemies rendered at 1.56 — shorter than a rabbit — until this.
+# 3.2d TITLE-SCREEN WEBGL (heroStage, the character deck's featured card):
+#      THREEJS is a CLOSURE var, not window.THREEJS. Clone texHeroes[i] before
+#      writing offset.x or the live player sprite is corrupted. stop() on
+#      startGame, and fall back to the 2D avatar on webglcontextlost. Size the
+#      plane by measured opaque pixels. Idle sway ~9deg max — bigger rotations
+#      just alias pixel art.
+# 3.3  Colliders stay traversable: tiles are 1 world unit, so cap box height.
+# 3.4  Never hand-draw a character in code. Art comes from the packs.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# 3.2e ONE PIXEL SIZE PER LINE-UP. Where characters appear together, fix the
+#      integer magnification, not the height: 32px and 128px art forced to one
+#      height differ 3x in apparent pixel size and read as broken.
+# 3.2f Never trust one viewport reading (window.innerHeight can be 0).
+#
+# LAW 4 — WRITING
+# ─────────────────────────────────────────────────────────────────────────
+# 4.1  Reference: Gintama. Nonsense on the surface, a real spine underneath,
+#      the serious beat always undercut before it turns smug.
+# 4.2  Characters, not concepts. Every line has a TURN.
+# 4.3  Never state the irony. Never explain a joke. Never end on a moral.
+# 4.4  Voices must differ. If two characters could swap lines, rewrite both.
+# 4.5  English primary, Indonesian secondary — ALWAYS both, never mixed
+#      inside one sentence.
+# 4.6  Invented country: NUSAGARA. Never name a real country.
+# 4.7  No religious jokes. Family friendly.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# 1.6  ONE WebGL CONTEXT. No second renderer for decoration. No CSS `filter`
+#      on transformed/composited layers. Hidden things get display:none.
+#      The title screen is paper — the game does not render behind it.
+# 1.8  Every glyph the UI types must exist in nusagara.ttf — check the cmap,
+#      draw it on the 68-unit grid if not. A fallback face is a second voice.
+# 1.9  A drag surface must not swallow its own buttons: bail out of pointerdown
+#      on ev.target.closest() of a control, and guard hover with pointer:fine.
+# 1.7  CPU time is not frame time. A microbenchmark never answers a report of
+#      stutter; remove the expensive thing instead.
+#
+# LAW 5 — VERIFICATION (each line is a bug I actually shipped)
+# ─────────────────────────────────────────────────────────────────────────
+# 5.1  PLAY IT. Counting DOM nodes is not verifying. I reported "16 cards, 0
+#      errors" while five rendered blank and the sprite was 2x oversized.
+# 5.2  Metrics prove the page did not throw. Nothing more. Never call a build
+#      "verified" or "enterprise grade" on metrics alone.
+# 5.3  Check the DEPLOYED url, in a FRESH tab. Console buffers across loads,
+#      and some bugs only appear at production load speed.
+# 5.4  His screenshot outranks my test output. If he shows it, it exists.
+# 5.5  Syntax-gate every edit:
+#      python3 -c "import io;s=io.open('index.html',encoding='utf-8').read();\
+#      i=s.rindex('<script>');j=s.rindex('</script>');\
+#      io.open('/tmp/game.js','w',encoding='utf-8').write(s[i+8:j])" \
+#      && node --check /tmp/game.js
+# 5.6  Extracted != wired. An asset counts only when visible in the game.
+# 5.7  Renaming means renaming everywhere. Grep the old name to zero.
+# 5.8  Guard material props: unlit materials have no .emissive (22k
+#      exceptions/frame killed the loop).
+# 5.9  Guard the load race: input before genLevel() left SPAWN null.
+# 5.10 AUDIO: one cached <audio> per track. Never reassign .src to switch —
+#      it refetches and restarts. unlockAudio() may ONLY unlock; it fires on
+#      click+pointerdown+touchstart+keydown, so starting music there
+#      restarted the theme on every input.
+# 5.11 Synthetic key tests need a ~140ms hold or readInput() never samples it.
+# 5.12 DEV.enabled MUST ship false. Flip to true only to verify, then restore.
+# 5.13 `var L` ANYWHERE shadows the L(en,id) translator for its whole
+#      function (hoisting). boot() builds the title sheet, so a torch-pool
+#      `var L` broke every translated string on the page. Grep `var L` to zero.
+# 5.14 Follow the value to where it is USED, not to where it is set. A correct
+#      measurement consumed by code that scales it afterwards is still a bug.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 5B — VOCABULARY: DEVELOPMENT LANGUAGE NEVER ENTERS THE BUILD
+# ─────────────────────────────────────────────────────────────────────────
+# The words used to brief this work are not part of the fiction. They must
+# never appear in any UI string, version string, or source comment visible
+# to a player. Complete banned list:
+#   "enterprise grade" / "enterprise-grade"
+#   "absurd" (as a design term, not a character using it naturally)
+#   "prompt" / "raw prompt"
+#   "AI slop" / "AI" (as label in UI)
+#   "FREAK" (owner criticism, not content)
+#   "autentik" (dev-briefing feedback word)
+#   "nyeleneh" (internal design language)
+#   "enterprise" alone as a quality descriptor
+# If any appear in a player-visible string = bug, same severity as a console
+# error. Grep for them before every deploy.
+#
+# ─────────────────────────────────────────────────────────────────────────
+# LAW 6 — DELIVERY
+# ─────────────────────────────────────────────────────────────────────────
+# 6.1  Finish, verify, deploy, then report. Do not stop to ask permission for
+#      work already requested.
+# 6.2  Report honestly: what was checked, what was not, what is still broken.
+#      State gaps unasked — but FIX them rather than listing them as excuses.
+# 6.3  Single file: index.html. No build step. Deploy: stage index.html +
+#      _headers + assets/ to /tmp/stage, then npx -y wrangler pages deploy
+#      /tmp/stage --project-name=parcelseven

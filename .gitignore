@@ -1,0 +1,19 @@
+.DS_Store
+node_modules
+dist
+# Dev-only downloaded asset packs (GBs, reference only — never commit).
+game-2d-pxl-assets/
+# Local backups + partial downloads.
+*.bak
+*.bak2
+*.crdownload
+Unconfirmed*
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+# Unrelated local prototypes and tool state — not part of this game.
+isekai-rpg/
+pen-ad/
+.kilo/
+.wrangler/
