@@ -1645,9 +1645,16 @@ function icon(n, size){
      2. or delete this block, the "TEMPORARY DEV BLOCK" in damagePlayer(),
         the #dev-bar markup, and the .dev-* CSS rules.
    ========================================================================== */
+/* Dev tools switch themselves on only when this file is opened straight from
+   disk (file://) for debugging. Anything served over http(s) — including the
+   production deploy — always ships clean. No manual flipping, ever. */
+var DEV_LOCAL_DEBUG = (function(){
+  try{ return String((typeof location !== "undefined" && location.protocol) || "").indexOf("file") === 0; }
+  catch(e){ return false; }
+})();
 var DEV = {
-  enabled: true,    // TEMP 2026-09-18 owner asked dev mode back on prod — flip back to false after
-  godMode: true     // TEMP 2026-09-18 infinite HP on boot — flip back to false after
+  enabled: DEV_LOCAL_DEBUG,
+  godMode: DEV_LOCAL_DEBUG
 };
 var GAME_VERSION = "3.0.1";
 /* Cache-buster for every art/music URL: a stale sprite with fresh code (or
