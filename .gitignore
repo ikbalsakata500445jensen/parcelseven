@@ -17,3 +17,8 @@ isekai-rpg/
 pen-ad/
 .kilo/
 .wrangler/
+
+# Harness scratch — never publish.
+.vanexa_todos.json
+AGI_PLAN.md
+parcel-seven-expansion-plan.md
