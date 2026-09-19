@@ -5251,9 +5251,29 @@ function dossierHTML(i){
 function paintDeckAvatars(){
   var avs = document.querySelectorAll("canvas.dc-av");
   if (!avs.length) return;
-  var box = avs[0].parentNode.getBoundingClientRect();
-  var slotW = Math.max(32, Math.round(box.width)),
-      slotH = Math.max(32, Math.round(box.height));
+  /* Measure a card that is actually on display. Card zero is display:none
+     whenever the selection sits elsewhere on a narrow drawer, and measuring
+     a hidden card reads 0x0 — which used to collapse every avatar canvas to
+     32px, stretching a shins-only sliver across the whole card. */
+  var slotW = 0, slotH = 0, qi;
+  /* the centre card sits at scale 1 with no perspective shrink; side cards
+     read smaller than they are, so measure the middle first */
+  var mid = document.querySelector(".dcard.is-centre canvas.dc-av");
+  var order = mid ? [mid] : [];
+  for (qi=0; qi<avs.length; qi++) if (avs[qi] !== mid) order.push(avs[qi]);
+  for (qi=0; qi<order.length; qi++){
+    var r = order[qi].parentNode.getBoundingClientRect();
+    if (r.width > 4 && r.height > 4){ slotW = Math.round(r.width); slotH = Math.round(r.height); break; }
+  }
+  if (!slotW || !slotH){
+    /* nothing measurable (drawer hidden or mid-layout): fall back to the
+       card's own inline size, which fitDeckToRoster always writes — never
+       to a hardcoded tiny canvas that clips everybody's head off */
+    var c0 = DECK.cards[0];
+    slotH = (c0 && parseInt(c0.style.height, 10)) || 0;
+    slotW = (c0 && c0.offsetWidth) || 0;
+    if (!slotW || !slotH) return;
+  }
   var k = DECK.px || deckPixelScale(slotH);
   for (var i=0;i<avs.length;i++){
     var idx = +avs[i].getAttribute("data-av");
