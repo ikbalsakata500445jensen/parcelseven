@@ -1,4 +1,4 @@
-# PARCEL SEVEN — Pixel Adventure
+# PARCEL SEVEN: Pixel Adventure
 
 One parcel. Forty-one years late. Twenty regions between the depot and whatever door it belongs to.
 
