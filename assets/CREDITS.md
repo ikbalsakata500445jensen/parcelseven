@@ -30,6 +30,16 @@ Shipped and used as in-game art: `loot/` (40 loot icons), `weapons/`
 (32x32 weapon icons), `portraits/` (medieval NPC avatars), `fx/`
 (explosion sprites), `fairy/` (fairy avatar icons), `clouds/`.
 
+Related gameplay sprites, all used, all from freebie packs: `sprites/pickups/`
+red/blue/green crystals from the Free RPG Currency pack (craftpix-net-934126),
+`sprites/consumables/` (potions, meat, bomb, feather, heart, shroom, warhorn)
+from the Free 40 Loot Icons pack (craftpix-net-972304), `sprites/props/`
+(barrel, crate, sack, vase, anvil, chest) cropped from the Free Dungeon
+Objects pack (craftpix-net-218281). Pixel-verified against the pack archives.
+Fourteen unused tree PNGs that sat in `assets/ext/props/` with no loader
+referencing them were deleted during the license audit, so nothing ships
+that the game does not use.
+
 License: CraftPix Freebies License — https://craftpix.net/file-licenses/
 Terms that matter here, quoted:
   * "You can sell and distribute games with our assets."

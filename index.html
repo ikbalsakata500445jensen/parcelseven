@@ -10356,7 +10356,7 @@ function boot(){
       g.drawImage(im, 0, 0, 64, 64);
       texCrystal[i] = mkTex(o.c, 1);
     };
-    im.src = SPRITE_BASE + "pickups/" + f;
+    im.src = assetURL(SPRITE_BASE + "pickups/" + f);
   });
   /* CraftPix consumables (loot-icons pack): potions, meat, rage, feather, bomb, horn, heart */
   ["potion_red","potion_blue","meat","rage_shroom","feather","bomb","warhorn","heart"].forEach(function(n){
@@ -10368,7 +10368,7 @@ function boot(){
       g.drawImage(im2, 0, 0, 32, 32);
       texCons[n] = mkTex(o.c, 1);
     };
-    im2.src = SPRITE_BASE + "consumables/" + n + ".png";
+    im2.src = assetURL(SPRITE_BASE + "consumables/" + n + ".png");
   });
   /* CraftPix breakable props: barrels, chests, crates, sacks, vases, anvils */
   [["barrel","barrel.png"],["crate","crate.png"],["sack","sack.png"],["vase","vase.png"],["anvil","anvil.png"],["chest_prop","chest.png"]].forEach(function(pair){
@@ -10380,7 +10380,7 @@ function boot(){
       g.drawImage(im3, 0, 0, 48, 48);
       texProps[pair[0]] = mkTex(o.c, 1);
     };
-    im3.src = SPRITE_BASE + "props/" + pair[1];
+    im3.src = assetURL(SPRITE_BASE + "props/" + pair[1]);
   });
   texChest  = mkTex(buildChest(), 2);
   texTorch  = mkTex(buildTorch(), 4);
